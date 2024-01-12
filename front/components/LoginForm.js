@@ -1,8 +1,17 @@
 import React, { useState, useCallback } from "react";
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input } from "antd"; // ant Design
 import Link from "next/link";
+import styled from "styled-components"; // 스타일 컨포넌트
 
-const LoginForm = () => {
+// 스타일 컨포넌트 : 스타일을 미리 정의, 컴포넌트에 적용시키는 방식으로 스타일을 적용시킨다
+const ButtonWrapper = styled.div`
+  margin-top: 10px;
+`;
+const FormWrapper = styled(Form)`
+    padding = 10px;
+`;
+
+const LoginForm = ({ setIsloggedIn }) => {
   // id, password의 상태를 초기화
   // setId, setPassword로 상태를 업데이트
   const [id, setId] = useState("");
@@ -17,8 +26,13 @@ const LoginForm = () => {
     setPassword(e.target.value);
   }, []);
 
+  const onsubmitForm = useCallback(() => {
+    console.log(id, password);
+    setIsloggedIn(true);
+  }, [id, password]);
+
   return (
-    <Form>
+    <FormWrapper onFinish={onsubmitForm}>
       <div>
         <label htmlFor="user-id">아이디</label>
         <br />
@@ -35,7 +49,7 @@ const LoginForm = () => {
           required
         />
       </div>
-      <div>
+      <ButtonWrapper>
         <Button type="primary" htmlType="submit" loading={false}>
           로그인
         </Button>
@@ -44,8 +58,8 @@ const LoginForm = () => {
             <Button>회원가입</Button>
           </a>
         </Link>
-      </div>
-    </Form>
+      </ButtonWrapper>
+    </FormWrapper>
   );
 };
 
