@@ -1,7 +1,8 @@
-import React, { useState, setIsloggedIn } from "react";
+import React from "react";
 import PropTypes from "prop-types"; // 레이아웃 컴포넌트 임폴트
 import Link from "next/link"; // link 컴포넌트 임폴드
 import { Menu, Input, Row, Col } from "antd"; // ant disign 임폴트 메뉴, 검색창 Row, Col -> 반응형 지원
+import { useSelector } from "react-redux";
 
 import styled from "styled-components"; // 스타일 컨포넌트
 
@@ -13,7 +14,8 @@ const SearchInput = styled(Input.Search)`
 `;
 
 const AppLayout = ({ children }) => {
-  const [isLoggedIn, setIsloggedIn] = useState(false); // 아직 서버가 없어 로그인이 불가능 그래서 임의의 로그인 상태 데이터를 주입
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+
   return (
     <div>
       <Menu mode="horizontal">
@@ -46,12 +48,8 @@ const AppLayout = ({ children }) => {
 
       <Row gutter={8}>
         <Col xs={24} md={6}>
-          {/* 로그인이 된 상태면 UserProfile 보여줌, 로그인 상태가 아니면 LoginForm을 보여준다 */}
-          {isLoggedIn ? (
-            <UserProfile setIsloggedIn={setIsloggedIn} />
-          ) : (
-            <LoginForm setIsloggedIn={setIsloggedIn} />
-          )}
+          {/* 조건부 렌더링을 구현 -> isLoggedIn의 값이 'true'면 UserProfile 컴포넌트가 렌더링되고, 'false'면 loginForm 컴포넌트가 렌더링된다.*/}
+          {isLoggedIn ? <UserProfile /> : <LoginForm />}
         </Col>
         <Col xs={24} md={12}>
           {children}

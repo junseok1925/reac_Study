@@ -1,10 +1,13 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useDebugValue } from "react";
 import { Avatar, Button, Card } from "antd";
+import { useDispatch } from "react-redux";
+import { logoutAction } from "../reducers";
 
-const UserProfile = ({ setIsloggedIn }) => {
-  // 로그아웃 컨포넌트함수 setIsloggedIn의 값을 'false'로 변경
+const UserProfile = () => {
+  const dispatch = useDispatch();
+
   const onLogOut = useCallback(() => {
-    setIsloggedIn(false);
+    dispatch(logoutAction());
   }, []);
   return (
     <Card
