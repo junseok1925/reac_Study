@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import Head from "next/head"; // next 헤드 컴포넌트를 제공
 import wrapper from "../store/configureStore"; // redux wrapper 거져오기
 
-
 const NodeBird = ({ Component }) => {
   return (
     <>

@@ -4,7 +4,7 @@ export const initialState = {
       id: 1,
       User: {
         id: 1,
-        nickname: "제로초",
+        nickname: "강준석",
       },
       content: "첫 번째 게시글",
       Images: [
@@ -21,15 +21,15 @@ export const initialState = {
       Comments: [
         {
           User: {
-            nickname: "nero",
+            nickname: "스키짱",
           },
-          content: "우와 개정판이 나왔군요~",
+          content: "스키장가고싶다~",
         },
         {
           User: {
-            nickname: "hero",
+            nickname: "볼링짱",
           },
-          content: "얼른 사고싶어요~",
+          content: "볼링치고싶당~",
         },
       ],
     },
@@ -49,7 +49,7 @@ const dummyPost = {
   content: "더미데이터입니다.",
   User: {
     id: 1,
-    nickname: "제로초",
+    nickname: "강준석",
   },
   Images: [],
   Comments: [],

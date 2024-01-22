@@ -1,47 +1,59 @@
-import React, { useCallback } from "react";
-import AppLayout from "../components/AppLayout";
-import Head from "next/head";
+import React, { useState, useCallback, useEffect } from "react";
 import { Form, Input, Checkbox, Button } from "antd";
-import styled from "styled-components";
+import { useDispatch } from "react-redux";
+import Head from "next/head";
+
+import { signUpAction } from "../reducers/user";
+import AppLayout from "../components/AppLayout";
 import useInput from "../hooks/useInput";
 
-const ErrorMessage = styled.div`
-  color: red;
-`;
-
 const Signup = () => {
-  const [id, onChangeId] = useInput("");
-  const [nickname, onChangeNickname] = useInput("");
-  const [password, onChangePassword] = useInput("");
   const [passwordCheck, setPasswordCheck] = useState("");
+  const [term, setTerm] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [termError, setTermError] = useState(false);
 
+  const [id, onChangeId] = useInput("");
+  const [nick, onChangeNick] = useInput("");
+  const [password, onChangePassword] = useInput("");
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (user) {
+      alert("로그인했으니 메인페이지로 이동합니다.");
+      Router.push("/");
+    }
+  }, [user && user.id]);
+
+  const onSubmit = useCallback(() => {
+    if (password !== passwordCheck) {
+      return setPasswordError(true);
+    }
+    if (!term) {
+      return setTermError(true);
+    }
+    dispatch(
+      signUpAction({
+        id,
+        password,
+        nick,
+      })
+    );
+  }, [password, passwordCheck, term]);
+
   const onChangePasswordCheck = useCallback(
     (e) => {
+      setPasswordError(e.target.value !== password);
       setPasswordCheck(e.target.value);
-      setPasswordError(e.target.value === password);
     },
     [password]
   );
 
-  const [term, setTerm] = useState("");
   const onChangeTerm = useCallback((e) => {
-    setTerm(e.target.checked);
     setTermError(false);
+    setTerm(e.target.checked);
   }, []);
-
-  const onSubmit = useCallback(() => {
-    //비밀번호 체크가 맞지 않다면
-    if (password !== passwordCheck) {
-      return setPasswordError(true);
-    }
-    // 약관동의를 안한다면
-    if (!term) {
-      return setTermError(true);
-    }
-    console.log(id, nickname, password);
-  }, [password, passwordCheck, term]);
 
   return (
     <AppLayout>
@@ -86,14 +98,16 @@ const Signup = () => {
             onChange={onChangePasswordCheck}
           />
           {passwordError && (
-            <ErrorMessage>비밀번호가 일치하지 않습니다.</ErrorMessage>
+            <div style={{ color: "red" }}>비밀번호가 일치하지 않습니다.</div>
           )}
         </div>
         <div>
           <Checkbox name="user-term" checked={term} onChange={onChangeTerm}>
             강준석의 말을 잘 들을 것을 동의합니다.
           </Checkbox>
-          {termError && <ErrorMessage>약관에 동의하셔야 합니다.</ErrorMessage>}
+          {termError && (
+            <div style={{ color: "red" }}>약관에 동의하셔야 합니다.</div>
+          )}
         </div>
         <div style={{ marginTop: 10 }}>
           <Button type="primary" htmlType="submit">
