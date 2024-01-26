@@ -1,15 +1,21 @@
+import { HYDRATE } from "next-redux-wrapper";
 import { combineReducers } from "redux";
-import axios from "axios";
+import user from "./user";
+import post from "./post";
 
-import userSlice from "./user";
-import postSlice from "./post";
-
-axios.defaults.baseURL = "http://localhost:3065";
-axios.defaults.withCredentials = true;
-// (이전상태, 액션) => 다음상태
+//                  (이전상태, 액션) => 다음상태
 const rootReducer = combineReducers({
-  user: userSlice.reducer,
-  post: postSlice.reducer,
+  index: (state = {}, action) => {
+    switch (action.type) {
+      case HYDRATE:
+        console.log("HYDRATE", action);
+        return { ...state, ...action.payload };
+      default:
+        return state;
+    }
+  },
+  user,
+  post,
 });
 
 export default rootReducer;

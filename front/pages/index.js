@@ -1,22 +1,38 @@
-import React from "react";
-import { useSelector } from "react-redux";
-
-import PostForm from "../components/PostForm";
-import PostCard from "../components/PostCard";
-import AppLayout from "../components/AppLayout";
-
-const Home = () => {
-  const { isLoggedIn } = useSelector((state) => state.user);
-  const { mainPosts } = useSelector((state) => state.post);
-
-  return (
-    <AppLayout>
-      {isLoggedIn && <PostForm />}
-      {mainPosts.map((c) => {
-        return <PostCard key={c.id} post={c} />;
-      })}
-    </AppLayout>
-  );
+// 초기값 설정
+const initialState = {
+  user: { isLoggedIn: false, user: null, signUpData: {}, loginData: {} },
+  post: { mainPosts: [] },
 };
 
-export default Home;
+const login = (data) => {
+  return {
+    type: "LOG_IN",
+    data,
+  };
+};
+//async action creator
+// action creator
+
+const changeNickname = (data) => {
+  return {
+    type: " CHANGE_NICKNAME",
+    data,
+  };
+};
+
+//                  (이전상태, 액션) => 다음상태
+const rootReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case "CHANGE_NICKNAME":
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          isLoggedIn: true,
+          user: action.data,
+        },
+      };
+  }
+};
+
+export default rootReducer;
